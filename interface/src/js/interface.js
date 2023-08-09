@@ -142,32 +142,46 @@ export function displayProducts(products) {
       }
       reLoadCart();
 
-      document.querySelectorAll(".plusButton").forEach((button) => {
-        button.addEventListener("click", (event) => {
-          let b = event.target.getAttribute("data-index2");
-          console.log(carts[b]);
-          carts[b].quantity++;
-          carts[b].price = carts[b].quantity * productsOb[b].price;
-          reLoadCart();
-        });
-      });
-      document.querySelectorAll(".minusButton").forEach((button) => {
-        button.addEventListener("click", (event) => {
-          let b = event.target.getAttribute("data-index2");
-          carts[b].quantity--;
-          carts[b].price = carts[b].quantity * productsOb[b].price;
-          console.log(carts[b].quantity);
-          if (carts[b].quantity == 0) {
-            delete carts[b];
-          }
+      // document.querySelectorAll(".plusButton").forEach((button) => {
+      //   button.addEventListener("click", (event) => {
+      //     let b = event.target.getAttribute("data-index2");
+      //     console.log(carts[b]);
+      //     carts[b].quantity++;
+      //     carts[b].price = carts[b].quantity * productsOb[b].price;
+      //     reLoadCart();
+      //   });
+      // });
+      // document.querySelectorAll(".minusButton").forEach((button) => {
+      //   button.addEventListener("click", (event) => {
+      //     let b = event.target.getAttribute("data-index2");
+      //     carts[b].quantity--;
+      //     carts[b].price = carts[b].quantity * productsOb[b].price;
+      //     console.log(carts[b].quantity);
+      //     if (carts[b].quantity == 0) {
+      //       delete carts[b];
+      //     }
 
-          reLoadCart();
-        });
-      });
+      //     reLoadCart();
+      //   });
+      // });
       getElement(".quantity-product").style.display = "block";
     };
   });
 }
+
+getElement(".offcanvas-body").onclick = (event) => {
+  let productStorangeJson = localStorage.getItem("productsJson");
+  let productsOb = JSON.parse(productStorangeJson);
+  const target = event.target;
+  let id = target.getAttribute("id");
+  let idData = target.getAttribute("data-id");
+  getElement(`#plusButton-${idData}`).addEventListener("click", (event) => {
+    let b = event.target.getAttribute("data-index2");
+    carts[b].quantity++;
+    carts[b].price = carts[b].quantity * productsOb[b].price;
+    reLoadCart();
+  });
+};
 
 function reLoadCart() {
   let bodyProduct = getElement("#offcanvas-body-product");
@@ -185,9 +199,9 @@ function reLoadCart() {
               <img src=${value.image} width="50px" height="50px" />
               <h5 class="mx-3 m-0">${value.name}</h5>
               <div class="d-flex">
-                <button class="btn btn-light minusButton" data-id="${value.id}" data-index2="${index}">-</button>
+                <button class="btn btn-light minusButton" id="minusButton-${value.id}" data-id="${value.id}" data-index2="${index}">-</button>
                 <input id="quantity-${value.id}" value="${value.quantity}" class="cart-quantity"/>
-                <button class="btn btn-light plusButton" data-id="${value.id}" data-value="${value.quantity}" data-index2="${index}")">+</button>
+                <button class="btn btn-light plusButton" id="plusButton-${value.id}" data-id="${value.id}" data-value="${value.quantity}" data-index2="${index}")">+</button>
               </div>
               <h6 class="mx-2 m-0">${value.price} Đ</h6>
               <button class="btn btn-danger text-center">X</button>
